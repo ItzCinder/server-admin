@@ -8,7 +8,7 @@ while true; do
     echo "      LISTA DE GRUPOS DEL SERVIDOR             "
     echo "==============================================="
     # Mostrar grupos sin incluir los del sistema
-    awk -F: '$3 >= 1000 && $3 < 60000 { gsub(/,/, " ", $4); print "Grupo: " $1 " (GID: " $3 ") - Miembros: " $4 }' /etc/group || || echo "Hubo un error en la ejecución del comando"
+    awk -F: '$3 >= 1000 && $3 < 60000 { gsub(/,/, " ", $4); print "Grupo: " $1 " (GID: " $3 ") - Miembros: " $4 }' /etc/group || echo "Hubo un error en la ejecución del comando"
     echo "==============================================="
     exit 0
 done
