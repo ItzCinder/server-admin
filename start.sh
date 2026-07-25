@@ -34,6 +34,6 @@ while true; do
             ;;
     esac
 
-    echo ""
+    echo ""  
     read -p "Presiona [Enter] para continuar..."
 done
