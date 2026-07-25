@@ -8,7 +8,7 @@ while true; do
     echo "      LISTA DE USUARIOS DEL SERVIDOR           "
     echo "==============================================="
     # Mostrar usuarios sin incluir los del sistema
-    awk -F: '$3 >= 1000 && $3 < 60000 {print $1}' /etc/passwd || echo "Hubo un error en la ejecución del comando"
+    awk -F: '{print "Usuario: " $1 " (UID: " $3 ")"}' /etc/passwd || echo "Hubo un error en la ejecución del comando"
     echo "==============================================="
     exit 0
 done
