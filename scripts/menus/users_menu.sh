@@ -10,7 +10,7 @@ while true; do
     echo "==============================================="
     echo
     echo "1) Crear usuario"
-    echo "2) Editar usuario"
+    echo "2) Modificar usuario"
     echo "3) Eliminar usuario"
     echo "0) Volver al menu principal"
     echo
@@ -20,10 +20,10 @@ while true; do
         1)  # Crear usuario
             bash "$SCRIPTS_DIR/users/create_user.sh"
             ;;
-        2)  # Editar usuario
+        2)  # Modificar usuario
             bash "$SCRIPTS_DIR/users/edit_user.sh"
             ;;    
-        3)  # Borrar usuario
+        3)  # Eliminar usuario
             bash "$SCRIPTS_DIR/users/delete_user.sh"
             ;;
         0)  # Salir del menu

@@ -10,7 +10,7 @@ while true; do
     echo "==============================================="
     echo
     echo "1) Crear grupo"
-    echo "2) Editar grupo"
+    echo "2) Modificar grupo"
     echo "3) Eliminar grupo"
     echo "4) Asignar grupo a un usuario"
     echo "0) Volver al menu principal"
@@ -21,10 +21,10 @@ while true; do
         1)  # Crear grupo
             bash "$SCRIPTS_DIR/groups/create_group.sh"
             ;;
-        2)  # Editar grupo
+        2)  # Modificar grupo
             bash "$SCRIPTS_DIR/groups/edit_group.sh"
             ;;    
-        3)  # Borrar grupo
+        3)  # Eliminar grupo
             bash "$SCRIPTS_DIR/groups/delete_group.sh"
             ;;
         4)  # Asignar grupo a un usuario
