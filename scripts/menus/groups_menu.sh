@@ -18,17 +18,17 @@ while true; do
     echo "==============================================="
     read -p "Selecciona una opción: " option
     case "$option" in
-        1)  # Consultar usuarios
-            bash "$SCRIPTS_DIR/query/query_users.sh"
+        1)  # Crear grupo
+            bash "$SCRIPTS_DIR/groups/create_group.sh"
             ;;
-        2)  # Consultar usuarios (Incluyendo los del sistema)
-            bash "$SCRIPTS_DIR/query/query_users_sys.sh"
+        2)  # Editar grupo
+            bash "$SCRIPTS_DIR/groups/edit_group.sh"
             ;;    
-        3)  # Consultar grupos
-            bash "$SCRIPTS_DIR/query/query_groups.sh"
+        3)  # Borrar grupo
+            bash "$SCRIPTS_DIR/groups/remove_group.sh"
             ;;
-        4)  # Consultar grupos (Incluyendo los del sistema)
-            bash "$SCRIPTS_DIR/query/query_groups_sys.sh"
+        4)  # Asignar grupo a un usuario
+            bash "$SCRIPTS_DIR/groups/assign_group.sh"
             ;;    
 
         0)  # Salir del menu
