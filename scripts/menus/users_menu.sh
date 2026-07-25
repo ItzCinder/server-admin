@@ -11,7 +11,7 @@ while true; do
     echo
     echo "1) Crear usuario"
     echo "2) Editar usuario"
-    echo "3) Borrar usuario"
+    echo "3) Eliminar usuario"
     echo "0) Volver al menu principal"
     echo
     echo "==============================================="
@@ -24,7 +24,7 @@ while true; do
             bash "$SCRIPTS_DIR/users/edit_user.sh"
             ;;    
         3)  # Borrar usuario
-            bash "$SCRIPTS_DIR/users/remove_user.sh"
+            bash "$SCRIPTS_DIR/users/delete_user.sh"
             ;;
         0)  # Salir del menu
             echo "Saliendo del panel..."
