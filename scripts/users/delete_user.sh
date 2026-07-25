@@ -20,6 +20,7 @@ while true; do
     # El usuario existe ?¿
     if ! user_exist "$delete_user"; then
         echo "El usuario '$delete_user' no existe en el sistema."
+        read -p "Presiona Enter para intentar de nuevo..."
         continue
     fi
 

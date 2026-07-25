@@ -34,6 +34,7 @@ while true; do
         # Si las ccontraseña no coincide
         if [ "$password" != "$password_confirm" ]; then
             echo "Las contraseñas no coinciden."
+            read -p "Presiona Enter para intentar de nuevo..."
             continue
         fi
         break
