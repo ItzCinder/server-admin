@@ -9,7 +9,7 @@ while true; do
     echo "      (Incluyendo los del sistema)             "
     echo "==============================================="
     # Mostrar grupos
-    cut -d: -f1 /etc/group
+    awk -F: '{print "Grupo: " $1 " (GID: " $3 ") - Miembros: " $4}' /etc/group || echo "Hubo un error en la ejecución del comando" 
     echo "==============================================="
     exit 0
 done
