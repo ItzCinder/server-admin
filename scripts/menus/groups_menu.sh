@@ -1,21 +1,23 @@
 #!/bin/bash
 
+source "$(dirname "$0")/../colors.sh"
+
 # Ruta de la carpeta donde se ubican los scripts
 export SCRIPTS_DIR="./scripts"
 while true; do
     clear
-    echo "==============================================="
-    echo "      PANEL DE ADMINISTRACIÓN DE GRUPOS        "
-    echo "                 DEL SERVIDOR                  "
-    echo "==============================================="
+    print_header "==============================================="
+    print_header "      PANEL DE ADMINISTRACIÓN DE GRUPOS        "
+    print_header "                 DEL SERVIDOR                  "
+    print_header "==============================================="
     echo
-    echo "1) Crear grupo"
-    echo "2) Modificar grupo"
-    echo "3) Eliminar grupo"
-    echo "4) Asignar grupo a un usuario"
-    echo "0) Volver al menu principal"
+    print_option "1) Crear grupo"
+    print_option "2) Modificar grupo"
+    print_option "3) Eliminar grupo"
+    print_option "4) Asignar grupo a un usuario"
+    print_option "0) Volver al menu principal"
     echo
-    echo "==============================================="
+    print_header "==============================================="
     read -p "Selecciona una opción: " option
     case "$option" in
         1)  # Crear grupo
@@ -32,11 +34,11 @@ while true; do
             ;;    
 
         0)  # Salir del menu
-            echo "Saliendo del panel..."
+            print_warning "Saliendo del panel..."
             exit 0
             ;;
         *)  # Validación de entrada no existente
-            echo "Opcion no valida. Intenta de nuevo."
+            print_error "Opcion no valida. Intenta de nuevo."
             ;;
     esac
 

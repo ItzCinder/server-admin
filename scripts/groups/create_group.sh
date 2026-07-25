@@ -1,7 +1,10 @@
 #!/bin/bash
+
+source "$(dirname "$0")/../colors.sh"
+
 # Validar si se esta ejecutando con sudo
 if [ "$EUID" -ne 0 ]; then
-    echo "Se requiere sudo para ejecutar esta accion..."
+    print_error "Se requiere sudo para ejecutar esta accion..."
     exit 1
 fi
 
@@ -12,21 +15,21 @@ group_exist() {
 
 while true; do
     clear
-    echo "==============================================="
-    echo "               CREAR UN GRUPO                  "
-    echo "==============================================="
+    print_header "==============================================="
+    print_header "               CREAR UN GRUPO                  "
+    print_header "==============================================="
     read -p "Ingresa el nombre del grupo a crear: " new_group
 
     if group_exist "$new_group"; then
-        echo "El grupo '$new_group' ya existe en el sistema."
+        print_error "El grupo '$new_group' ya existe en el sistema."
         read -p "Presiona Enter para intentar de nuevo..."
         continue
     fi
 
     echo ""
-    echo "¿Deseas asignar un identificador de grupo (GID) personalizado?"
-    echo "1) Si"
-    echo "0) No (el sistema da uno automaticamente)"
+    print_option "¿Deseas asignar un identificador de grupo (GID) personalizado?"
+    print_option "1) Si"
+    print_option "0) No (el sistema da uno automaticamente)"
     read -p "Selecciona una opcion (1/0): " use_gid
 
     create_options=""
@@ -39,24 +42,24 @@ while true; do
         if [[ "$gid_custom" =~ ^[0-9]+$ ]]; then
             create_options="-g $gid_custom"
         else
-            echo "El GID debe ser un valor numerico."
+            print_error "El GID debe ser un valor numerico."
             read -p "Presiona Enter para intentar de nuevo..."
             continue
         fi
     fi
 
     echo ""
-    echo "Creando el grupo '$new_group'"
+    print_info "Creando el grupo '$new_group'"
 
     groupadd $create_options "$new_group"
 
     if [ $? -eq 0 ]; then
-        echo "El grupo '$new_group' se ha creado exitosamente."
+        print_success "El grupo '$new_group' se ha creado exitosamente."
 
         info_group=$(getent group "$new_group")
-        echo "Detalles: $info_group"
+        print_info "Detalles: $info_group"
     else
-        echo "Hubo un error al crear el grupo."
+        print_error "Hubo un error al crear el grupo."
     fi
     exit 0
 done

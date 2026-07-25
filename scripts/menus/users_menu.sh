@@ -1,20 +1,22 @@
 #!/bin/bash
 
+source "$(dirname "$0")/../colors.sh"
+
 # Ruta de la carpeta donde se ubican los scripts
 export SCRIPTS_DIR="./scripts"
 while true; do
     clear
-    echo "==============================================="
-    echo "      PANEL DE ADMINISTRACIÓN DE USUARIOS      "
-    echo "                 DEL SERVIDOR                  "
-    echo "==============================================="
+    print_header "==============================================="
+    print_header "      PANEL DE ADMINISTRACIÓN DE USUARIOS      "
+    print_header "                 DEL SERVIDOR                  "
+    print_header "==============================================="
     echo
-    echo "1) Crear usuario"
-    echo "2) Modificar usuario"
-    echo "3) Eliminar usuario"
-    echo "0) Volver al menu principal"
+    print_option "1) Crear usuario"
+    print_option "2) Modificar usuario"
+    print_option "3) Eliminar usuario"
+    print_option "0) Volver al menu principal"
     echo
-    echo "==============================================="
+    print_header "==============================================="
     read -p "Selecciona una opción: " option
     case "$option" in
         1)  # Crear usuario
@@ -27,11 +29,11 @@ while true; do
             bash "$SCRIPTS_DIR/users/delete_user.sh"
             ;;
         0)  # Salir del menu
-            echo "Saliendo del panel..."
+            print_warning "Saliendo del panel..."
             exit 0
             ;;
         *)  # Validación de entrada no existente
-            echo "Opcion no valida. Intenta de nuevo."
+            print_error "Opcion no valida. Intenta de nuevo."
             ;;
     esac
 

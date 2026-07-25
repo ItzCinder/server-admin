@@ -1,7 +1,10 @@
 #!/bin/bash
+
+source "$(dirname "$0")/../colors.sh"
+
 # Validar si se esta ejecutando con sudo
 if [ "$EUID" -ne 0 ]; then
-    echo "Se requiere sudo para ejecutar esta accion..."
+    print_error "Se requiere sudo para ejecutar esta accion..."
     exit 1
 fi
 
@@ -17,13 +20,13 @@ group_exist() {
 
 while true; do
     clear
-    echo "==============================================="
-    echo "          ASIGNAR GRUPO A UN USUARIO           "
-    echo "==============================================="
+    print_header "==============================================="
+    print_header "          ASIGNAR GRUPO A UN USUARIO           "
+    print_header "==============================================="
     read -p "Ingresa el nombre del usuario: " user
 
     if ! user_exist "$user"; then
-        echo "El usuario '$user' no existe en el sistema."
+        print_error "El usuario '$user' no existe en el sistema."
         read -p "Presiona Enter para intentar de nuevo..."
         continue
     fi
@@ -31,21 +34,21 @@ while true; do
     read -p "Ingresa el nombre del grupo a asignar a '$user'." $group
 
     if ! group_exist "$group"; then
-        echo "El grupo '$group' no existe en el sistema."
+        print_error "El grupo '$group' no existe en el sistema."
         read -p "Presiona Enter para intentar de nuevo..."
         continue
     fi
 
     # Comprobar si Usuario esta en el grupo
     if id -nG "$user" | grep -qw "$group"; then
-        echo "El usuario '$user' ya pertenece al grupo '$group'."
+        print_warning "El usuario '$user' ya pertenece al grupo '$group'."
         exit 0
     fi
 
     echo ""
-    echo "¿Como deseas asignar el grupo '$group' al usuario '$user'?"
-    echo "1) Como grupo secundario (conserva sus otros grupos)"
-    echo "0) Como grupo primario (cambia su grupo principal por defecto)"
+    print_option "¿Como deseas asignar el grupo '$group' al usuario '$user'?"
+    print_option "1) Como grupo secundario (conserva sus otros grupos)"
+    print_option "0) Como grupo primario (cambia su grupo principal por defecto)"
     read -p "Selecciona una opcion (1/0): " type_group
 
     if [ "$type_group" -eq 0] 2>/dev/null; then
@@ -57,14 +60,14 @@ while true; do
     fi
 
     echo ""
-    echo "Asignando '$user' a '$group' ($description)..."
+    print_info "Asignando '$user' a '$group' ($description)..."
 
     usermod $option "$group" "$user"
 
     if [ $? -eq 0 ]; then
-        echo "El usuario '$user' ahora pertenece al grupo '$group'."
+        print_success "El usuario '$user' ahora pertenece al grupo '$group'."
     else
-        echo "Hubo un fallo al intentar asignar el grupo."
+        print_error "Hubo un fallo al intentar asignar el grupo."
     fi
     exit 0
 done

@@ -1,20 +1,22 @@
 #!/bin/bash
 
+source "$(dirname "$0")/../colors.sh"
+
 # Ruta de la carpeta donde se ubican los scripts
 export SCRIPTS_DIR="./scripts"
 while true; do
     clear
-    echo "==============================================="
-    echo "      PANEL DE CONSULTA DEL SERVIDOR           "
-    echo "==============================================="
+    print_header "==============================================="
+    print_header "      PANEL DE CONSULTA DEL SERVIDOR           "
+    print_header "==============================================="
     echo
-    echo "1) Consultar usuarios"
-    echo "2) Consultar usuarios (Incluyendo los del sistema)"
-    echo "3) Consultar grupos"
-    echo "4) Consultar grupos (Incluyendo los del sistema)"
-    echo "0) Volver al menu principal"
+    print_option "1) Consultar usuarios"
+    print_option "2) Consultar usuarios (Incluyendo los del sistema)"
+    print_option "3) Consultar grupos"
+    print_option "4) Consultar grupos (Incluyendo los del sistema)"
+    print_option "0) Volver al menu principal"
     echo
-    echo "==============================================="
+    print_header "==============================================="
     read -p "Selecciona una opción: " option
     case "$option" in
         1)  # Consultar usuarios
@@ -31,11 +33,11 @@ while true; do
             ;;    
 
         0)  # Salir del menu
-            echo "Saliendo del panel..."
+            print_warning "Saliendo del panel..."
             exit 0
             ;;
         *)  # Validación de entrada no existente
-            echo "Opcion no valida. Intenta de nuevo."
+            print_error "Opcion no valida. Intenta de nuevo."
             ;;
     esac
 

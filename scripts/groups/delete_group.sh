@@ -1,7 +1,10 @@
 #!/bin/bash
+
+source "$(dirname "$0")/../colors.sh"
+
 # Validar si se esta ejecutando con sudo
 if [ "$EUID" -ne 0 ]; then
-    echo "Se requiere sudo para ejecutar esta accion..."
+    print_error "Se requiere sudo para ejecutar esta accion..."
     exit 1
 fi
 
@@ -12,13 +15,13 @@ group_exist() {
 
 while true; do
     clear
-    echo "==============================================="
-    echo "               BORRAR UN GRUPO                 "
-    echo "==============================================="
+    print_header "==============================================="
+    print_header "               BORRAR UN GRUPO                 "
+    print_header "==============================================="
     read -p "Ingresa el nombre del grupo a eliminar: " delete_group
 
     if ! group_exist "$delete_group"; then
-        echo "El grupo '$delete_group' no existe en el sistema."
+        print_error "El grupo '$delete_group' no existe en el sistema."
         read -p "Presiona Enter para intentar de nuevo..."
         continue
     fi
@@ -28,40 +31,40 @@ while true; do
     primary_users=$(awk -F: -v gid="$gid_group" '$4 == gid {print $1}' /etc/passwd)
 
     if [ -n "$primary_users" ]; then
-        echo "No sepuede eliminar el grupo '$delete_group'."
-        echo "Es el grupo primario de los siguientes usuarios:"
-        echo "-> $primary_users"
-        echo "Debes cambiar su grupo primario o borrar dichos usuarios antes."
+        print_error "No sepuede eliminar el grupo '$delete_group'."
+        print_error "Es el grupo primario de los siguientes usuarios:"
+        print_error "-> $primary_users"
+        print_error "Debes cambiar su grupo primario o borrar dichos usuarios antes."
         exit 1
     fi
 
     secondary_users=$(getent group "$delete_group" | cut -d: -f4)
 
     if [ -n "$secundary_users" ]; then
-        echo "Los siguientes usuarios perderan este grupo secundario: "
-        echo "-> $secundary_users"
+        print_warning "Los siguientes usuarios perderan este grupo secundario: "
+        print_warning "-> $secondary_users"
         echo ""
     fi
 
-    echo "¿Estas seguro de eliminar el grupo '$delete_group'?"
-    echo "1) Si"
-    echo "0) No"
+    print_option "¿Estas seguro de eliminar el grupo '$delete_group'?"
+    print_option "1) Si"
+    print_option "0) No"
     read -p "Selecciona una opcion (1/0): " confirm
 
     if [ "$confirm" -ne 1 ] 2>/dev/null; then
-        echo "Operacion cancelada."
+        print_warning "Operacion cancelada."
         exit 0
     fi
 
     echo ""
-    echo "Eliminando grupo '$delete_group'..."
+    print_info "Eliminando grupo '$delete_group'..."
 
     groupdel "$delete_group"
 
     if [ $? -eq 0 ]; then
-        echo "El grupo '$delete_group' ha sido eliminado del sistema."
+        print_success "El grupo '$delete_group' ha sido eliminado del sistema."
     else
-        echo "Hubo un fallo al intentar eliminar el grupo."
+        print_error "Hubo un fallo al intentar eliminar el grupo."
     fi
     exit 0
 done

@@ -1,7 +1,10 @@
 #!/bin/bash
+
+source "$(dirname "$0")/../colors.sh"
+
 # Validar si se esta ejecutando con sudo
 if [ "$EUID" -ne 0 ]; then
-    echo "Se requiere sudo para ejecutar esta accion..."
+    print_error "Se requiere sudo para ejecutar esta accion..."
     exit 1
 fi
 
@@ -12,15 +15,15 @@ user_exist() {
 
 while true; do
     clear
-    echo "==============================================="
-    echo "              CREAR UN USUARIO                 "
-    echo "==============================================="
+    print_header "==============================================="
+    print_header "              CREAR UN USUARIO                 "
+    print_header "==============================================="
     read -p "Ingresa el nombre del nuevo usuario: " new_user
 
     # Verificar si el usuario existe
     if user_exist "$new_user"; then
-        echo "El usuario '$new_user' ya existe en el sistema."
-        read -p "Presona Enter para intentar de nuevo..."
+        print_error "El usuario '$new_user' ya existe en el sistema."
+        read -p "Presiona Enter para intentar de nuevo..."
         continue
     fi
 
@@ -33,7 +36,7 @@ while true; do
 
         # Si las ccontraseña no coincide
         if [ "$password" != "$password_confirm" ]; then
-            echo "Las contraseñas no coinciden."
+            print_warning "Las contraseñas no coinciden."
             read -p "Presiona Enter para intentar de nuevo..."
             continue
         fi
@@ -46,10 +49,10 @@ while true; do
     echo "$new_user:$password" | chpasswd
 
     if [ $? -eq 0 ]; then
-        echo "El usuario '$new_user' fue creado correctamente."
+        print_success "El usuario '$new_user' fue creado correctamente."
 
     else
-        echo "Hubo un fallo al intentar crear el usuario."
+        print_error "Hubo un fallo al intentar crear el usuario."
     fi
     exit 0
 done
