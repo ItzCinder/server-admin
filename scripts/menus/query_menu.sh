@@ -20,7 +20,7 @@ while true; do
         1)  # Consultar usuarios
             bash "$SCRIPTS_DIR/query/query_users.sh"
             ;;
-        1)  # Consultar usuarios (Incluyendo los del sistema)
+        2)  # Consultar usuarios (Incluyendo los del sistema)
             bash "$SCRIPTS_DIR/query/query_users_sys.sh"
             ;;    
         3)  # Consultar grupos
