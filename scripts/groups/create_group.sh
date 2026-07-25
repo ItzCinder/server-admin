@@ -48,7 +48,7 @@ while true; do
     echo ""
     echo "Creando el grupo '$new_group'"
 
-    groupdadd $create_options "$new_group"
+    groupadd $create_options "$new_group"
 
     if [ $? -eq 0 ]; then
         echo "El grupo '$new_group' se ha creado exitosamente."
