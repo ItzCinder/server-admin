@@ -11,6 +11,7 @@ while true; do
     echo "1) Consultar usuarios"
     echo "2) Consultar usuarios (Incluyendo los del sistema)"
     echo "3) Consultar grupos"
+    echo "4) Consultar grupos (Incluyendo los del sistema)"
     echo "0) Volver al menu principal"
     echo
     echo "==============================================="
@@ -25,6 +26,10 @@ while true; do
         3)  # Consultar grupos
             bash "$SCRIPTS_DIR/query/query_groups.sh"
             ;;
+        4)  # Consultar grupos (Incluyendo los del sistema)
+            bash "$SCRIPTS_DIR/query/query_groups_sys.sh"
+            ;;    
+
         0)  # Salir del menu
             echo "Saliendo del panel..."
             exit 0
