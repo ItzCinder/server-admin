@@ -9,7 +9,7 @@ while true; do
     echo "      (Incluyendo los del sistema)             "
     echo "==============================================="
     # Mostrar todos los usuarios
-    cut -d: -f1 /etc/passwd || echo "Hubo un error en la ejecución del comando"
+    awk -F: '$3 >= 1000 && $3 < 60000 {print "Usuario: " $1 " (UID: " $3 ")"}' /etc/passwd
     echo "==============================================="
     exit 0
 done
