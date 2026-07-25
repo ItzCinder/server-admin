@@ -23,9 +23,9 @@ while true; do
         continue
     fi
 
-    $gid_group=$(getent group "$delete_group" | cut -d: -f3)
+    gid_group=$(getent group "$delete_group" | cut -d: -f3)
     # si es grupo primario de algun usuario
-    $primary_users=$(awk -F: -v gid="$gid_group" '$4 == gid {print $1}' /etc/passwd)
+    primary_users=$(awk -F: -v gid="$gid_group" '$4 == gid {print $1}' /etc/passwd)
 
     if [ -n "$primary_users" ]; then
         echo "No sepuede eliminar el grupo '$delete_group'."
@@ -35,7 +35,7 @@ while true; do
         exit 1
     fi
 
-    $secundary_users=$(getent group "$delete_group" | cut -d: -f4)
+    secondary_users=$(getent group "$delete_group" | cut -d: -f4)
 
     if [ -n "$secundary_users" ]; then
         echo "Los siguientes usuarios perderan este grupo secundario: "
