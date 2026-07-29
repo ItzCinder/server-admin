@@ -66,6 +66,7 @@ while true; do
             print_success "Grupo creado: $group"
         fi
 
+        # Darle permisos sudo a un grupo que le corresponde permisos SUDO
         if [[ "$req_sudo" == "true" ]]; then
 
             print_info "Configurando sudo para el grupo '$group'..."
