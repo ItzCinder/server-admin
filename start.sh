@@ -12,7 +12,7 @@ while true; do
     echo
     print_option "1) Gestionar usuarios"
     print_option "2) Gestionar grupos"
-    print_option "3) Consultar grupos/usuarios"
+    print_option "3) Panel de PROVISIONAMIENTO"
     print_option "0) Salir"
     echo
     print_header "==============================================="
