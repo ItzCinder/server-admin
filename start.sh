@@ -27,6 +27,9 @@ while true; do
         3)  # Consultar grupos/usuarios
             bash "$SCRIPTS_DIR/menus/query_menu.sh"
             ;;
+        4)  # Gestión de provisionamientos
+            bash "$SCRIPTS_DIR/menus/provisioning_menu.sh"
+            ;;
         0)  # Salir del programa
             print_warning "Saliendo del panel..."
             exit 0
