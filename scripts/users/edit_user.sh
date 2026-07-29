@@ -67,8 +67,8 @@ while true; do
             print_info "Su carpeta personal ahora es: /home/$new_user"
         fi
     else
-        print_error "Hubo un fall al intentar modificar el nombre del usuario."
-    fi
+            print_error "Hubo un fallo al intentar modificar el nombre del usuario."
+        fi
     exit 0
 done
 
