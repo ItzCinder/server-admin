@@ -215,14 +215,13 @@ Script: `scripts/provisioning/setup_users.sh`
 
 ### 9.4 Roles y responsabilidades
 
-- **sysadmin**: administración general del servidor y tareas de alto privilegio.
-- **webadmin**: administración de componentes relacionados con la aplicación web.
-- **dbadmin**: administración de la base de datos.
-- **backup**: operación y mantenimiento de respaldos.
-- **audit**: revisión y auditoría del entorno.
-- **users**: cuenta de uso general y estándar.
-- **scriptdev**: desarrollo y mantenimiento de scripts de automatización.
-
+- **sysadmin**: Administra todo el servidor, instala paquetes, crea usuarios, configura servicios y resuelve problemas.
+- **webadmin**: Gestiona el servidor web, ejecuta aplicaciones y administra los archivos del sitio web.
+- **dbadmin**: Administra MySQL, crea base de datos, usuarios y hace respaldos.
+- **backup**: Ejecuta y verifica copias de seguridad y restauraciones.
+- **audit**: Revisa registros del sistema y verifica eventos de seguridad sin modificar configuraciones.
+- **users**: Tiene acceso al servidor solo para tareas especificas (por ejemplo, desarrollo o mantenimiento limitado).
+- **scriptdev**: Desarrolla, prueba y mantiene scripts de automatización para el servidor.
 
 ## 10. Menús interactivos
 
