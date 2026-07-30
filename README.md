@@ -1,14 +1,15 @@
-# Server Admin
+# Server Admin - Documentación
 
+## 1. Descripción general
 Panel de administración de servidor desarrollado en Bash como parte del Proyecto Nuva. Su objetivo es facilitar la gestión administrativa del servidor que alojará la plataforma web de Gestión Deportiva Modular mediante un menú interactivo.
 
-## Funcionalidades
+## 2. Funcionalidades
 - Gestionar usuarios
 - Gestionar grupos
 - Consultar usuarios y grupos del sistema
 - Panel de provisionamiento
 
-## Estructura del proyecto
+## 3. Estructura
 
 ```
 start.sh
@@ -37,106 +38,208 @@ scripts/
     └── edit_user.sh
 ```
 
-## Estructura de directorios
+## 4. Arquitectura
+> El panel esta organizado con los siguientes modulos.
 
-### scripts/
-Contiene todos los scripts del panel de administración.
+1. **Gestión de usuarios**
+2. **Gestión de grupos**
+3. **Consultas del sistema**
+4. **Provisionamiento**
 
-#### users/
-Scripts relacionados con la administración de usuarios.
+El archivo `start.sh` actúa como punto de entrada y muestra un menú principal que redirige a los submenús de cada módulo.
 
-#### groups/
-Scripts relacionados con la administración de grupos.
+## 5. Menu Principal
+El menú principal ofrece estas opciones:
 
-#### query/
-Scripts destinados a consultas del sistema.
+- Gestionar usuarios
+- Gestionar grupos
+- Consultar grupos/usuarios
+- Panel de provisionamiento
+- Salir
 
-#### provisioning/
-Scripts de aprovisionamiento del servidor.
+## 6. Gestión de usuarios
 
-#### menus/
-Menús interactivos del panel.
+### 6.1 Crear usuario
+Este módulo permite administrar cuentas locales del sistema.
 
----
+Script: `scripts/users/create_user.sh`
 
-## Archivos principales
-- Archivos principales escenciales para correr el panel completo.
+Funcionamiento:
 
-### start.sh
-Punto de entrada del panel de administración.
+- Verifica si el usuario ya existe.
+- Solicita nombre de usuario.
+- Pide y confirma contraseña.
+- Crea el usuario con shell `/bin/bash`.
+- Asigna la contraseña mediante `chpasswd`.
 
-### scripts/colors.sh
-Define los colores utilizados por la interfaz.
+### 6.2 Modificar usuario
 
----
+Script: `scripts/users/edit_user.sh`
 
-## Administración de usuarios
-- Modulo encargado de la administración de usuarios del sistema.
+Funcionamiento:
 
-### create_user.sh
-Permite crear usuarios.
+- Verifica que el usuario exista.
+- Comprueba que no tenga procesos activos.
+- Permite renombrar el usuario.
+- Opcionalmente renombra también la carpeta `/home`.
 
-### edit_user.sh
-Permite modificar el nombre de un usuario.
+### 6.3 Eliminar usuario
 
-### delete_user.sh
-Permite eliminar un usuario y, opcionalmente, su directorio personal.
+Script: `scripts/users/delete_user.sh`
 
----
+Funcionamiento:
 
-## Administración de grupos
-- Modulo encargado de la administración de grupos del sistema.
+- Verifica que el usuario exista.
+- No permite eliminar usuarios con procesos activos.
+- Permite conservar o eliminar la carpeta personal `/home`.
+- Solicita confirmación antes de ejecutar el borrado.
 
-### create_group.sh
-Crea grupos.
+## 7. Gestión de grupos
 
-### edit_group.sh
-Modifica el nombre de un grupo.
+Este módulo permite administrar grupos locales del sistema.
 
-### delete_group.sh
-Elimina un grupo.
+### 7.1 Crear grupo
 
-### assign_group.sh
-Asigna grupos a usuarios.
+Script: `scripts/groups/create_group.sh`
 
----
+Funcionamiento:
 
-## Consultas
-- Modulo encargado de los scripts relacionados a consultas de información acerca del entorno.
+- Verifica si el grupo ya existe.
+- Permite definir un GID personalizado.
+- Si no se indica GID, el sistema asigna uno automáticamente.
+- Muestra información del grupo creado.
 
-### query_users.sh
-Consulta usuarios (sin incluir servicios y de Linux).
+### 7.2 Modificar grupo
 
-### query_users_sys.sh
-Consulta todos los usuarios (incluyendo de servicios y de Linux).
+Script: `scripts/groups/edit_group.sh`
 
-### query_groups.sh
-Consulta grupos (sin incluir servicios y de Linux).
+Funcionamiento:
 
-### query_groups_sys.sh
-Consulta todos los grupos (incluyendo de servicios y de Linux).
+- Verifica que el grupo exista.
+- Cambia el nombre del grupo.
 
----
+### 7.3 Eliminar grupo
 
-## Provisionamiento
-- El modulo de provisionamiento es la encargada de ejecutar scripts encargados de la preparación del entorno para el despliegue de la plataforma web.
+Script: `scripts/groups/delete_group.sh`
 
-### setup_users.sh
-Realiza el aprovisionamiento inicial de usuarios y grupos.
+Funcionamiento:
 
----
+- Verifica que el grupo exista.
+- Comprueba si es grupo primario de algún usuario.
+- Advierte si hay usuarios que podrían perder el grupo secundario.
+- Solicita confirmación antes de eliminarlo.
 
-## Menús
-- El directorio de menús contiene los scripts de menús interactivos que permiten la integración de todos los modulos.
+### 7.4 Asignar grupo a usuario
 
-### users_menu.sh
+Script: `scripts/groups/assign_group.sh`
+
+Funcionamiento:
+
+- Verifica que el usuario exista.
+- Verifica que el grupo exista.
+- Comprueba si el usuario ya pertenece al grupo.
+- Permite asignar el grupo como:
+  - grupo secundario
+  - grupo primario
+ 
+## 8. Consultas del sistema
+
+Este módulo permite listar usuarios y grupos desde los archivos del sistema.
+
+### 8.1 Consultar usuarios
+
+Script: `scripts/query/query_users.sh`
+
+- Muestra usuarios normales.
+- Excluye cuentas del sistema.
+- Usa `/etc/passwd` para mostrar los usuarios.
+
+### 8.2 Consultar usuarios del sistema
+
+Script: `scripts/query/query_users_sys.sh`
+
+- Muestra todos los usuarios.
+- Incluye cuentas de servicio y del sistema.
+- Usa `/etc/passwd` para mostrar los usuarios.
+
+### 8.3 Consultar grupos
+
+Script: `scripts/query/query_groups.sh`
+
+- Muestra grupos normales.
+- Excluye grupos del sistema.
+- Usa `/etc/group` para mostrar los grupos.
+
+### 8.4 Consultar grupos del sistema
+
+Script: `scripts/query/query_groups_sys.sh`
+
+- Muestra todos los grupos.
+- Incluye grupos de servicio y del sistema.
+- Usa `/etc/group` para mostrar los grupos.
+
+## 9. Provisionamiento
+
+El módulo de provisionamiento contiene scripts para la configuracion inicial del servidor para el despliegue del Proyecto Nuva.
+
+### 9.1 Preparación de usuarios
+
+Script: `scripts/provisioning/setup_users.sh`
+> Este script automatiza la creación inicial de identidades necesarias para el servidor.
+
+- Crea grupos necesarios para el servidor.
+- Crea usuarios necesarios para el servidor, asignando tambien su tipo de shell y si posee sudo dependiendo de responsabilidades.
+
+### 9.2 Grupos creados
+
+- `sysadmin`
+- `webadmin`
+- `dbadmin`
+- `backup`
+- `audit`
+- `users`
+- `scriptdev`
+
+### 9.3 Usuarios creados
+
+
+| Usuario | Grupo primario | Shell | Descripción | Privilegios |
+|---|---|---|---|---|
+| `admin` | `sysadmin` | `/bin/bash` | Administrador del sistema | Sudo |
+| `webadmin` | `webadmin` | `/bin/bash` | Administrador web | Sin sudo |
+| `dbadmin` | `dbadmin` | `/bin/bash` | Administrador de base de datos | Sin sudo |
+| `backupop` | `backup` | `/bin/bash` | Operador de respaldos | Sin sudo |
+| `auditor` | `audit` | `/usr/bin/rbash` | Auditor | Shell restringida |
+| `user` | `users` | `/bin/bash` | Usuario estándar | Sin sudo |
+| `scriptdev` | `scriptdev` | `/bin/bash` | Desarrollador de scripts | Sin sudo |
+
+### 9.4 Roles y responsabilidades
+
+- **sysadmin**: administración general del servidor y tareas de alto privilegio.
+- **webadmin**: administración de componentes relacionados con la aplicación web.
+- **dbadmin**: administración de la base de datos.
+- **backup**: operación y mantenimiento de respaldos.
+- **audit**: revisión y auditoría del entorno.
+- **users**: cuenta de uso general y estándar.
+- **scriptdev**: desarrollo y mantenimiento de scripts de automatización.
+
+
+## 10. Menús interactivos
+
+Los menús del directorio `scripts/menus/` integran todo el flujo del panel.
+
+### 10.1 users_menu.sh
+
 Menú de administración de usuarios.
 
-### groups_menu.sh
+### 10.2 groups_menu.sh
+
 Menú de administración de grupos.
 
-### query_menu.sh
-Menú de consultas.
+### 10.3 query_menu.sh
 
-### provisioning_menu.sh
+Menú de consultas del sistema.
+
+### 10.4 provisioning_menu.sh
+
 Menú del módulo de aprovisionamiento.
