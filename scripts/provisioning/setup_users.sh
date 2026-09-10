@@ -57,59 +57,55 @@ while true; do
             ;;
     esac
 
-    # Iterar GROUPS -> crear grupos
-    for entry in "${GROUPS[@]}"; do
-        IFS=":" read -r group req_sudo <<< "$entry"
-
-        # Si el grupo no existe
-        if ! getent group "$group" >/dev/null; then
-            groupadd "$group"
-            print_success "Grupo creado: $group"
-        fi
-
-        # Darle permisos sudo a un grupo que le corresponde permisos SUDO
-        if [[ "$req_sudo" == "true" ]]; then
-
-            print_info "Configurando sudo para el grupo '$group'..."
-
-            SUDO_FILE="/etc/sudoers.d/$group"
-            TEMP_FILE=$(mktemp)
-            echo "%$group ALL=(ALL:ALL) ALL" > "$TEMP_FILE"
-
-            if visudo -cf "$TEMP_FILE" >/dev/null; then
-                mv "$TEMP_FILE" "$SUDO_FILE"
-                chmod 0440 "$SUDO_FILE"
-                chown root:root "$SUDO_FILE"
-                print_success "Permisos sudo configurados para: $group"
-            fi
-        fi
-
-
-    done
-
-    # Crear usuarios con sus respectivos grupos y shell iterando sobre USERS
-    echo
-    for entry in "${USERS[@]}"; do
-        IFS=":" read -r user group description shell <<< "$entry"
-
-        if ! id -u "$user" >/dev/null; then
-            print_info "Creando usuario '$user' con grupo '$group' ($description)..."
-            if useradd -m -g "$group" -c "$description" -s "$shell" "$user"; then
-                print_success "Usuario: '$user' | Grupo: '$group' | Shell: '$shell'"
-            else
-                print_error "No se pudo crear el usuario '$user'."
-            fi
-        else
-            print_warning "El usuario '$user' ya existe. Se omite su creación."
-        fi
-
-    done
-
-    echo
-    print_header "======================================="
-    print_success "     SETUP DE USUARIOS FINALIZADO     "
-    print_header "======================================="
-    echo ""
-    read -p "Presiona [Enter] para continuar..."
-    exit 0
 done
+
+# Iterar GROUPS -> crear grupos
+for entry in "${GROUPS[@]}"; do
+    IFS=":" read -r group req_sudo <<< "$entry"
+
+    # Si el grupo no existe
+    if ! getent group "$group" >/dev/null; then
+        groupadd "$group"
+        print_success "Grupo creado: $group"
+    fi
+
+    # Darle permisos sudo a un grupo que le corresponde permisos SUDO
+    if [[ "$req_sudo" == "true" ]]; then
+        print_info "Configurando sudo para el grupo '$group'..."
+
+        SUDO_FILE="/etc/sudoers.d/$group"
+        TEMP_FILE=$(mktemp)
+        echo "%$group ALL=(ALL:ALL) ALL" > "$TEMP_FILE"
+
+        if visudo -cf "$TEMP_FILE" >/dev/null; then
+            mv "$TEMP_FILE" "$SUDO_FILE"
+            chmod 0440 "$SUDO_FILE"
+            chown root:root "$SUDO_FILE"
+            print_success "Permisos sudo configurados para: $group"
+        fi
+    fi
+done
+
+# Crear usuarios con sus respectivos grupos y shell iterando sobre USERS
+echo
+for entry in "${USERS[@]}"; do
+    IFS=":" read -r user group description shell <<< "$entry"
+
+    if ! id -u "$user" >/dev/null; then
+        print_info "Creando usuario '$user' con grupo '$group' ($description)..."
+        if useradd -m -g "$group" -c "$description" -s "$shell" "$user"; then
+            print_success "Usuario: '$user' | Grupo: '$group' | Shell: '$shell'"
+        else
+            print_error "No se pudo crear el usuario '$user'."
+        fi
+    else
+        print_warning "El usuario '$user' ya existe. Se omite su creación."
+    fi
+done
+
+echo
+print_header "======================================="
+print_success "     SETUP DE USUARIOS FINALIZADO     "
+print_header "======================================="
+echo ""
+read -p "Presiona [Enter] para continuar..."
