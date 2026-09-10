@@ -5,6 +5,7 @@ SOURCE_DIR="/opt/lampp/etc" # Configuraciones de XAMPP (httpd.conf, php.ini, my.
 LOG_FILE="/var/log/backups/configs.log"
 
 mkdir -p "$DEST_DIR"
+mkdir -p $(dirname "$LOG_FILE")
 
 # Respaldo Full de las configuraciones
 tar -czf "$DEST_DIR/configs_full_$DATE.tar.gz" -C "$SOURCE_DIR" .

@@ -8,6 +8,7 @@ LOG_FILE="/var/log/backups/logs.log"
 SNAPSHOT_FILE="$DEST_DIR/logs_snapshot.snar"
 
 mkdir -p "$DEST_DIR/differential" "$DEST_DIR/full"
+mkdir -p $(dirname "$LOG_FILE")
 
 if [ "$TYPE" == "full" ]; then
     rm -f "$SNAPSHOT_FILE"

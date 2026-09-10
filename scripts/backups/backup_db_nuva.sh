@@ -10,6 +10,7 @@ DB_PASS="" # Contraseña del usuario de la BD
 DB_NAME="nuva_db" # Nombre de la base de datos
 
 mkdir -p "$DEST_DIR/daily" "$DEST_DIR/weekly"
+mkdir -p $(dirname "$LOG_FILE")
 
 if [ "$TYPE" == "daily" ]; then
     # Exportación lógica diaria (Estructura y datos)

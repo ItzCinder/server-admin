@@ -7,6 +7,7 @@ LOG_FILE="/var/log/backups/repos.log"
 SNAPSHOT_FILE="$DEST_DIR/repos_snapshot.snar"
 
 mkdir -p "$DEST_DIR/differential" "$DEST_DIR/full"
+mkdir -p $(dirname "$LOG_FILE")
 
 if [ "$TYPE" == "full" ]; then
     # Eliminar el snapshot anterior para forzar un backup completo nuevo
