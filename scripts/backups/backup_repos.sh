@@ -15,7 +15,11 @@ if [ "$TYPE" == "full" ]; then
     tar --listed-incremental="$SNAPSHOT_FILE" -czf "$DEST_DIR/full/repos_full_$DATE.tar.gz" -C "$SOURCE_DIR" .
     
     # Retención: 6 mese
-    find "$DEST_DIR/full" -type f -name "*.tar.gz" -mtime +180 -delete
+    count=$(find "$DEST_DIR/full" -type f -name "*.tar.gz" -mtime +180 | wc -l)
+    if [ "$count" -gt 0 ]; then
+        find "$DEST_DIR/full" -type f -name "*.tar.gz" -mtime +180 -delete
+        echo "[OK] Se eliminaron con éxito $count Respaldo Código FULL antiguos por cumplimiento de la política de retención. (180 días)" >> "$LOG_FILE"
+    fi
     echo "[$(date)] Respaldo Código Completo OK." >> "$LOG_FILE"
 
 elif [ "$TYPE" == "differential" ]; then
@@ -23,6 +27,10 @@ elif [ "$TYPE" == "differential" ]; then
     tar --listed-incremental="$SNAPSHOT_FILE" -czf "$DEST_DIR/differential/repos_diff_$DATE.tar.gz" -C "$SOURCE_DIR" .
     
     # Retención: 14 días
-    find "$DEST_DIR/differential" -type f -name "*.tar.gz" -mtime +14 -delete
-    echo "[$(date)] Respaldo Código Diferenciaal OK." >> "$LOG_FILE"
+    count=$(find "$DEST_DIR/differential" -type f -name "*.tar.gz" -mtime +14 | wc -l)
+    if [ "$count" -gt 0 ]; then
+        find "$DEST_DIR/differential" -type f -name "*.tar.gz" -mtime +14 -delete
+        echo "[OK] Se eliminaron con éxito $count Respaldo Código DIFFERENTIAL antiguos por cumplimiento de la política de retención. (14 días)" >> "$LOG_FILE"
+    fi
+
 fi

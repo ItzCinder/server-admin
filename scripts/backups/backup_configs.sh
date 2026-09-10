@@ -11,6 +11,10 @@ mkdir -p $(dirname "$LOG_FILE")
 tar -czf "$DEST_DIR/configs_full_$DATE.tar.gz" -C "$SOURCE_DIR" .
 
 # Retención: 12 meses
-find "$DEST_DIR" -type f -name "*.tar.gz" -mtime +365 -delete
+count=$(find "$DEST_DIR" -type f -name "*.tar.gz" -mtime +365 | wc -l)
+if [ "$count" -gt 0 ]; then
+	find "$DEST_DIR" -type f -name "*.tar.gz" -mtime +365 -delete
+	echo "[OK] Se eliminaron con éxito $count Respaldo Configuraciones XAMPP antiguos por cumplimiento de la política de retención. (365 días)" >> "$LOG_FILE"
+fi
 
 echo "[$(date)] Respaldo Configuraciones XAMPP OK." >> "$LOG_FILE"

@@ -17,7 +17,11 @@ if [ "$TYPE" == "daily" ]; then
     $MYSQLDUMP -u $DB_USER -p$DB_PASS $DB_NAME | gzip > "$DEST_DIR/daily/nuva_daily_$DATE.sql.gz"
     
     # Retención de 30 días
-    find "$DEST_DIR/daily" -type f -name "*.gz" -mtime +30 -delete
+    count=$(find "$DEST_DIR/daily" -type f -name "*.gz" -mtime +30 | wc -l)
+    if [ "$count" -gt 0 ]; then
+        find "$DEST_DIR/daily" -type f -name "*.gz" -mtime +30 -delete
+        echo "[OK] Se eliminaron con éxito $count Respaldo MariaDB DAILY antiguos por cumplimiento de la política de retención. (30 días)" >> "$LOG_FILE"
+    fi
     echo "[$(date)] Respaldo MariaDB daily OK." >> "$LOG_FILE"
 
 elif [ "$TYPE" == "weekly" ]; then
@@ -25,6 +29,10 @@ elif [ "$TYPE" == "weekly" ]; then
     $MYSQLDUMP -u $DB_USER -p$DB_PASS --routines --triggers --events $DB_NAME | gzip > "$DEST_DIR/weekly/nuva_full_$DATE.sql.gz"
     
     # Retención de 12 meses
-    find "$DEST_DIR/weekly" -type f -name "*.gz" -mtime +365 -delete
+    count=$(find "$DEST_DIR/weekly" -type f -name "*.gz" -mtime +365 | wc -l)
+    if [ "$count" -gt 0 ]; then
+        find "$DEST_DIR/weekly" -type f -name "*.gz" -mtime +365 -delete
+        echo "[OK] Se eliminaron con éxito $count Respaldo MariaDB WEEKLY antiguos por cumplimiento de la política de retención. (365 días)" >> "$LOG_FILE"
+    fi
     echo "[$(date)] Respaldo MariaDB weekly Full OK." >> "$LOG_FILE"
 fi
