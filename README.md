@@ -1,5 +1,41 @@
 # Nuva PanelSRV - Documentación
 
+<details>
+<summary>Índice de contenidos</summary>
+
+- [1. Descripción general](#1-descripción-general)
+- [2. Funcionalidades](#2-funcionalidades)
+- [3. Estructura](#3-estructura)
+- [4. Arquitectura](#4-arquitectura)
+- [5. Menú principal](#5-menu-principal)
+- [6. Gestión de usuarios](#6-gestión-de-usuarios)
+  - [6.1 Crear usuario](#61-crear-usuario)
+  - [6.2 Modificar usuario](#62-modificar-usuario)
+  - [6.3 Eliminar usuario](#63-eliminar-usuario)
+- [7. Gestión de grupos](#7-gestión-de-grupos)
+  - [7.1 Crear grupo](#71-crear-grupo)
+  - [7.2 Modificar grupo](#72-modificar-grupo)
+  - [7.3 Eliminar grupo](#73-eliminar-grupo)
+  - [7.4 Asignar grupo a usuario](#74-asignar-grupo-a-usuario)
+- [8. Consultas del sistema](#8-consultas-del-sistema)
+  - [8.1 Consultar usuarios](#81-consultar-usuarios)
+  - [8.2 Consultar usuarios del sistema](#82-consultar-usuarios-del-sistema)
+  - [8.3 Consultar grupos](#83-consultar-grupos)
+  - [8.4 Consultar grupos del sistema](#84-consultar-grupos-del-sistema)
+- [9. Provisionamiento](#9-provisionamiento)
+  - [9.1 Preparación de usuarios](#91-preparación-de-usuarios)
+  - [9.2 Grupos creados](#92-grupos-creados)
+  - [9.3 Usuarios creados](#93-usuarios-creados)
+  - [9.4 Roles y responsabilidades](#94-roles-y-responsabilidades)
+  - [9.5 Provisionamiento de respaldos en cron](#95-provisionamiento-de-respaldos-en-cron)
+- [10. Menús interactivos](#10-menús-interactivos)
+  - [10.1 users_menu.sh](#101-users_menush)
+  - [10.2 groups_menu.sh](#102-groups_menush)
+  - [10.3 query_menu.sh](#103-query_menush)
+  - [10.4 provisioning_menu.sh](#104-provisioning_menush)
+
+</details>
+
 ## 1. Descripción general
 Panel de administración de servidor desarrollado en Bash como parte del Proyecto Nuva. Su objetivo es facilitar la gestión administrativa del servidor que alojará la plataforma web de Gestión Deportiva Modular mediante un menú interactivo.
 
