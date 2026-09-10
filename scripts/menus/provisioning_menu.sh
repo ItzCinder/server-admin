@@ -21,6 +21,9 @@ while true; do
         1)  # Setup usuarios
             bash "$SCRIPTS_DIR/provisioning/setup_users.sh"
             ;; 
+        1)  # Setup Crontab
+            bash "$SCRIPTS_DIR/provisioning/setup_backups_cron.sh"
+            ;; 
 
         0)  # Salir del menu
             print_warning "Saliendo del panel..."
