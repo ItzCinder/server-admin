@@ -1,4 +1,4 @@
-# Server Admin - Documentación
+# Nuva PanelSRV - Documentación
 
 ## 1. Descripción general
 Panel de administración de servidor desarrollado en Bash como parte del Proyecto Nuva. Su objetivo es facilitar la gestión administrativa del servidor que alojará la plataforma web de Gestión Deportiva Modular mediante un menú interactivo.
@@ -26,7 +26,8 @@ scripts/
 │   ├── query_menu.sh
 │   └── users_menu.sh
 ├── provisioning/
-│   └── setup_users.sh
+│   ├── setup_users.sh
+│   └── setup_backups_cron.sh
 ├── query/
 │   ├── query_groups.sh
 │   ├── query_groups_sys.sh
@@ -222,6 +223,28 @@ Script: `scripts/provisioning/setup_users.sh`
 - **audit**: Revisa registros del sistema y verifica eventos de seguridad sin modificar configuraciones.
 - **users**: Tiene acceso al servidor solo para tareas especificas (por ejemplo, desarrollo o mantenimiento limitado).
 - **scriptdev**: Desarrolla, prueba y mantiene scripts de automatización para el servidor.
+
+### 9.5 Provisionamiento de respaldos en cron
+
+El script `scripts/provisioning/setup_backups_cron.sh` instala las tareas programadas en el crontab del usuario `backupop`:
+
+| Respaldo | Programación |
+|---|---|
+| Base de datos diaria | Todos los días a las 23:00 |
+| Base de datos full semanal | Domingos a las 02:00 |
+| Repositorios diferencial | Lunes a viernes a las 20:00 |
+| Repositorios full | Sábados a la 01:00 |
+| Configuraciones full | Domingos a las 03:00 |
+| Logs y evidencias diferencial | Todos los días a las 23:30 |
+| Logs y evidencias full | Día 1 de cada mes a las 04:00 |
+
+Ejecutar como administrador:
+
+```bash
+sudo bash scripts/provisioning/setup_backups_cron.sh
+```
+
+El bloque administrado se reemplaza de forma idempotente y las entradas de cron ajenas al proyecto se conservan. Para instalar los jobs en otro usuario, usar `BACKUP_USER=usuario`; para una ruta desplegada diferente, usar `PROJECT_DIR=/ruta/server-admin`.
 
 ## 10. Menús interactivos
 

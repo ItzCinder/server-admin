@@ -1,0 +1,1 @@
+# Script a futuro que se encargara de administrar los permisos para cada usuario. Visudo, Chmod.
