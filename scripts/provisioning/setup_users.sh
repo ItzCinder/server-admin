@@ -23,7 +23,7 @@ USERS=(
 )
 
 # Definiciones -> grupo y si requiere sudo
-GROUPS=(
+REQUIRED_GROUPS=(
     "sysadmin:true"
     "webadmin:false"
     "dbadmin:false"
@@ -82,8 +82,8 @@ create_group() {
     return 1
 }
 
-# Iterar GROUPS -> crear grupos
-for entry in "${GROUPS[@]}"; do
+# Iterar REQUIRED_GROUPS -> crear grupos
+for entry in "${REQUIRED_GROUPS[@]}"; do
     IFS=":" read -r group req_sudo <<< "$entry"
 
     create_group "$group"
