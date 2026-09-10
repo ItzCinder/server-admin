@@ -21,7 +21,7 @@ while true; do
         1)  # Setup usuarios
             bash "$SCRIPTS_DIR/provisioning/setup_users.sh"
             ;; 
-        1)  # Setup Crontab
+        2)  # Setup Crontab
             bash "$SCRIPTS_DIR/provisioning/setup_backups_cron.sh"
             ;; 
 
