@@ -22,7 +22,7 @@ USERS=(
   "scriptdev:scriptdev:Desarrollador de Scripts:/bin/bash"
 )
 
-# Definiciones -> grupo:sudo
+# Definiciones -> grupo y si requiere sudo
 GROUPS=(
     "sysadmin:true"
     "webadmin:false"
@@ -53,6 +53,7 @@ while true; do
             ;;
         *)
             print_error "Opcion no valida. Intenta de nuevo."
+            continue
             ;;
     esac
 
@@ -95,8 +96,12 @@ while true; do
             print_info "Creando usuario '$user' con grupo '$group' ($description)..."
             if useradd -m -g "$group" -c "$description" -s "$shell" "$user"; then
                 print_success "Usuario: '$user' | Grupo: '$group' | Shell: '$shell'"
-            fi    read -p "Presiona [Enter] para continuar..."
-        fi 
+            else
+                print_error "No se pudo crear el usuario '$user'."
+            fi
+        else
+            print_warning "El usuario '$user' ya existe. Se omite su creación."
+        fi
 
     done
 

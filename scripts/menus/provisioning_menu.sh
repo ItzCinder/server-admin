@@ -12,6 +12,7 @@ while true; do
     print_header "==============================================="
     echo
     print_option "1) Provisionamiento de usuarios y grupos"
+    print_option "2) Provisionamiento de configuración backuop crontab"
     print_option "0) Volver al menu principal"
     echo
     print_header "==============================================="

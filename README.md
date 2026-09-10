@@ -325,3 +325,9 @@ Menú de consultas del sistema.
 ### 10.4 provisioning_menu.sh
 
 Menú del módulo de aprovisionamiento.
+
+Opciones disponibles:
+
+- `1) Provisionamiento de usuarios y grupos`
+- `2) Provisionamiento de configuración backup crontab`
+- `0) Volver al menu principal`
