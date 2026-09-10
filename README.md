@@ -28,6 +28,7 @@
   - [9.3 Usuarios creados](#93-usuarios-creados)
   - [9.4 Roles y responsabilidades](#94-roles-y-responsabilidades)
   - [9.5 Provisionamiento de respaldos en cron](#95-provisionamiento-de-respaldos-en-cron)
+  - [9.6 Política y ubicación de los respaldos](#96-política-y-ubicación-de-los-respaldos)
 - [10. Menús interactivos](#10-menús-interactivos)
   - [10.1 users_menu.sh](#101-users_menush)
   - [10.2 groups_menu.sh](#102-groups_menush)
@@ -51,6 +52,11 @@ Panel de administración de servidor desarrollado en Bash como parte del Proyect
 start.sh
 scripts/
 ├── colors.sh
+├── backups/
+│   ├── backup_configs.sh
+│   ├── backup_db_nuva.sh
+│   ├── backup_logs.sh
+│   └── backup_repos.sh
 ├── groups/
 │   ├── assign_group.sh
 │   ├── create_group.sh
@@ -281,6 +287,22 @@ sudo bash scripts/provisioning/setup_backups_cron.sh
 ```
 
 El bloque administrado se reemplaza de forma idempotente y las entradas de cron ajenas al proyecto se conservan. Para instalar los jobs en otro usuario, usar `BACKUP_USER=usuario`; para una ruta desplegada diferente, usar `PROJECT_DIR=/ruta/server-admin`.
+
+### 9.6 Política y ubicación de los respaldos
+
+Los respaldos se almacenan fuera del código del proyecto, en `/mnt/backups`, separados por tipo de información. El operador de respaldos crea y verifica las copias; el auditor revisa los logs y evidencias sin modificar los archivos.
+
+| Elemento | Tipo y retención | Ubicación |
+|---|---|---|
+| Base de datos de Nuva | Diaria, 30 días | `/mnt/backups/db_nuva/daily/` |
+| Base de datos de Nuva | Full semanal, 12 meses | `/mnt/backups/db_nuva/weekly/` |
+| Repositorios de código y documentación | Diferencial diario, 14 días | `/mnt/backups/repos/differential/` |
+| Repositorios de código y documentación | Full semanal, 6 meses | `/mnt/backups/repos/full/` |
+| Configuraciones del servidor | Full, 12 meses | `/mnt/backups/configs/` |
+| Logs de Apache y MariaDB | Diferencial diario, 90 días | `/mnt/backups/logs_auditoria/differential/` |
+| Logs de Apache y MariaDB | Full mensual, 1 año | `/mnt/backups/logs_auditoria/full/` |
+
+Los archivos temporales, cachés y datos no críticos quedan fuera del alcance. Las evidencias de pruebas de seguridad deben almacenarse dentro de la ruta de evidencias definida para el servidor antes de ejecutar el backup de logs, para garantizar que sean incluidas y conserven la retención de auditoría correspondiente.
 
 ## 10. Menús interactivos
 
