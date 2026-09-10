@@ -59,15 +59,34 @@ while true; do
 
 done
 
+create_group() {
+    local group_name="$1"
+
+    if getent group "$group_name" >/dev/null 2>&1; then
+        print_warning "El grupo '$group_name' ya existe."
+        return 0
+    fi
+
+    print_info "Creando grupo '$group_name'..."
+    if groupadd "$group_name"; then
+        if getent group "$group_name" >/dev/null 2>&1; then
+            print_success "Grupo creado: $group_name"
+            return 0
+        fi
+
+        print_error "El grupo '$group_name' no se pudo verificar tras crearse."
+        return 1
+    fi
+
+    print_error "No se pudo crear el grupo '$group_name'."
+    return 1
+}
+
 # Iterar GROUPS -> crear grupos
 for entry in "${GROUPS[@]}"; do
     IFS=":" read -r group req_sudo <<< "$entry"
 
-    # Si el grupo no existe
-    if ! getent group "$group" >/dev/null; then
-        groupadd "$group"
-        print_success "Grupo creado: $group"
-    fi
+    create_group "$group"
 
     # Darle permisos sudo a un grupo que le corresponde permisos SUDO
     if [[ "$req_sudo" == "true" ]]; then
@@ -82,6 +101,9 @@ for entry in "${GROUPS[@]}"; do
             chmod 0440 "$SUDO_FILE"
             chown root:root "$SUDO_FILE"
             print_success "Permisos sudo configurados para: $group"
+        else
+            rm -f "$TEMP_FILE"
+            print_error "No se pudo validar la configuración sudo para '$group'."
         fi
     fi
 done
@@ -91,7 +113,12 @@ echo
 for entry in "${USERS[@]}"; do
     IFS=":" read -r user group description shell <<< "$entry"
 
-    if ! id -u "$user" >/dev/null; then
+    if ! getent group "$group" >/dev/null 2>&1; then
+        print_error "El grupo requerido '$group' no existe. No se puede crear el usuario '$user'."
+        continue
+    fi
+
+    if ! id -u "$user" >/dev/null 2>&1; then
         print_info "Creando usuario '$user' con grupo '$group' ($description)..."
         if useradd -m -g "$group" -c "$description" -s "$shell" "$user"; then
             print_success "Usuario: '$user' | Grupo: '$group' | Shell: '$shell'"
