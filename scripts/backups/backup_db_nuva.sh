@@ -7,7 +7,7 @@ LOG_FILE="/var/log/backups/db_audit.log"
 MYSQLDUMP="/opt/lampp/bin/mysqldump"
 DB_USER="root" # Usuario de la BD
 DB_PASS="" # Contraseña del usuario de la BD
-DB_NAME="nuva_db" # Nombre de la base de datos
+DB_NAME="${DB_NAME:-NuvaBD}" # Nombre de la base de datos
 
 mkdir -p "$DEST_DIR/daily" "$DEST_DIR/weekly"
 mkdir -p $(dirname "$LOG_FILE")

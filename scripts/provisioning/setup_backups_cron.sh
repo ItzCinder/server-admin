@@ -10,6 +10,7 @@ fi
 BACKUP_USER="${BACKUP_USER:-backupop}"
 PROJECT_DIR="${PROJECT_DIR:-$(cd "$(dirname "${BASH_SOURCE[0]}")/../.." && pwd)}"
 BACKUP_DIR="$PROJECT_DIR/scripts/backups"
+MONITOR_DIR="$PROJECT_DIR/scripts/monitoring"
 START_MARKER="# BEGIN nuva-panelSRV-backups"
 END_MARKER="# END nuva-panelSRV-backups"
 
@@ -20,7 +21,7 @@ if ! id -u "$BACKUP_USER" >/dev/null 2>&1; then
 fi
 
 # Identifica si existe los scriptss
-for script in "$BACKUP_DIR/backup_db_nuva.sh" "$BACKUP_DIR/backup_repos.sh" "$BACKUP_DIR/backup_configs.sh" "$BACKUP_DIR/backup_logs.sh"; do
+for script in "$BACKUP_DIR/backup_db_nuva.sh" "$BACKUP_DIR/backup_repos.sh" "$BACKUP_DIR/backup_configs.sh" "$BACKUP_DIR/backup_logs.sh" "$MONITOR_DIR/monitor_mariadb.sh"; do
     if [ ! -f "$script" ]; then
         echo "No se encuentra el script de backup: $script" >&2
         exit 1
@@ -48,10 +49,11 @@ PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
 0 3 * * 0 /bin/bash "$BACKUP_DIR/backup_configs.sh"
 30 23 * * * /bin/bash "$BACKUP_DIR/backup_logs.sh" differential
 0 4 1 * * /bin/bash "$BACKUP_DIR/backup_logs.sh" full
+*/5 * * * * /bin/bash "$MONITOR_DIR/monitor_mariadb.sh"
 $END_MARKER
 EOF
 )
 # Incrusta las tareas viejas FILTERED_CRONTAB + el bloque nuevo con las tareas de CRON_BLOCK.
 printf '%s\n%s\n' "$FILTERED_CRONTAB" "$CRON_BLOCK" | crontab -u "$BACKUP_USER" -
 
-echo "Tareas de backup configuradas en el crontab de '$BACKUP_USER'."
+echo "Tareas de backup y monitoreo MariaDB configuradas en el crontab de '$BACKUP_USER'."

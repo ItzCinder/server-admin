@@ -22,6 +22,7 @@
   - [8.2 Consultar usuarios del sistema](#82-consultar-usuarios-del-sistema)
   - [8.3 Consultar grupos](#83-consultar-grupos)
   - [8.4 Consultar grupos del sistema](#84-consultar-grupos-del-sistema)
+  - [8.5 Consultar base de datos MariaDB](#85-consultar-base-de-datos-mariadb)
 - [9. Provisionamiento](#9-provisionamiento)
   - [9.1 Preparación de usuarios](#91-preparación-de-usuarios)
   - [9.2 Grupos creados](#92-grupos-creados)
@@ -46,6 +47,7 @@ Panel de administración de servidor desarrollado en Bash como parte del Proyect
 - Gestionar usuarios
 - Gestionar grupos
 - Consultar usuarios y grupos del sistema
+- Consultar la base de datos MariaDB
 - Panel de provisionamiento
 
 ## 3. Estructura
@@ -73,6 +75,7 @@ scripts/
 │   ├── setup_users.sh
 │   └── setup_backups_cron.sh
 ├── query/
+│   ├── query_database.sh
 │   ├── query_groups.sh
 │   ├── query_groups_sys.sh
 │   ├── query_users.sh
@@ -223,6 +226,19 @@ Script: `scripts/query/query_groups_sys.sh`
 - Incluye grupos de servicio y del sistema.
 - Usa `/etc/group` para mostrar los grupos.
 
+### 8.5 Consultar base de datos MariaDB
+
+Script: `scripts/query/query_database.sh`
+
+Desde el menú de consultas se pueden ejecutar operaciones de solo lectura sobre `NuvaBD`:
+
+- Ver la base de datos seleccionada, la versión de MariaDB y la fecha del servidor.
+- Listar las tablas y su cantidad estimada de registros.
+- Seleccionar una tabla para consultar su estructura.
+- Ordenar las tablas por cantidad de registros.
+
+El cliente y la conexión pueden configurarse mediante `MYSQL`, `MYSQL_HOST`, `MYSQL_PORT`, `MYSQL_USER`, `DB_PASS` y `DB_NAME`.
+
 ## 9. Provisionamiento
 
 El módulo de provisionamiento contiene scripts para la configuracion inicial del servidor para el despliegue del Proyecto Nuva.
@@ -281,6 +297,7 @@ El script `scripts/provisioning/setup_backups_cron.sh` instala las tareas progra
 | Configuraciones full | Domingos a las 03:00 |
 | Logs y evidencias diferencial | Todos los días a las 23:30 |
 | Logs y evidencias full | Día 1 de cada mes a las 04:00 |
+| Disponibilidad de MariaDB | Cada 5 minutos |
 
 Ejecutar como administrador:
 
@@ -289,6 +306,8 @@ sudo bash scripts/provisioning/setup_backups_cron.sh
 ```
 
 El bloque administrado se reemplaza de forma idempotente y las entradas de cron ajenas al proyecto se conservan. Para instalar los jobs en otro usuario, usar `BACKUP_USER=usuario`; para una ruta desplegada diferente, usar `PROJECT_DIR=/ruta/server-admin`.
+
+El monitoreo verifica la disponibilidad de MariaDB mediante `mysqladmin ping`, ejecuta una consulta sobre `information_schema` en `NuvaBD` y registra los resultados en `/var/log/backups/mariadb_monitor.log`. Los clientes se esperan en `/opt/lampp/bin/mysqladmin` y `/opt/lampp/bin/mysql`; pueden cambiarse mediante `MYSQLADMIN`, `MYSQL`, `MYSQL_HOST`, `MYSQL_PORT`, `MYSQL_USER`, `DB_PASS`, `DB_NAME` y `MARIADB_MONITOR_LOG`.
 
 ### 9.6 Política y ubicación de los respaldos
 

@@ -2,8 +2,8 @@
 
 source "$(dirname "$0")/scripts/colors.sh"
 
-# Ruta de la carpeta donde se ubican los scripts
-SCRIPTS_DIR="./scripts"
+# Ruta de la carpeta donde se ubican los scripts, independiente del directorio actual.
+SCRIPTS_DIR="$(cd "$(dirname "$0")/scripts" && pwd)"
 while true; do
     clear
     print_header "==============================================="

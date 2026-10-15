@@ -2,8 +2,8 @@
 
 source "$(dirname "$0")/../colors.sh"
 
-# Ruta de la carpeta donde se ubican los scripts
-export SCRIPTS_DIR="./scripts"
+# Ruta de la carpeta donde se ubican los scripts, independiente del directorio actual.
+export SCRIPTS_DIR="$(cd "$(dirname "$0")/.." && pwd)"
 while true; do
     clear
     print_header "==============================================="
@@ -14,6 +14,7 @@ while true; do
     print_option "2) Consultar usuarios (Incluyendo los del sistema)"
     print_option "3) Consultar grupos"
     print_option "4) Consultar grupos (Incluyendo los del sistema)"
+    print_option "5) Consultar base de datos MariaDB"
     print_option "0) Volver al menu principal"
     echo
     print_header "==============================================="
@@ -31,6 +32,9 @@ while true; do
         4)  # Consultar grupos (Incluyendo los del sistema)
             bash "$SCRIPTS_DIR/query/query_groups_sys.sh"
             ;;    
+        5)  # Consultar base de datos MariaDB
+            bash "$SCRIPTS_DIR/query/query_database.sh"
+            ;;
 
         0)  # Salir del menu
             print_warning "Saliendo del panel..."
