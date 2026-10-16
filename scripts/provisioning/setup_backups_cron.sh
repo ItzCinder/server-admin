@@ -56,4 +56,4 @@ EOF
 # Incrusta las tareas viejas FILTERED_CRONTAB + el bloque nuevo con las tareas de CRON_BLOCK.
 printf '%s\n%s\n' "$FILTERED_CRONTAB" "$CRON_BLOCK" | crontab -u "$BACKUP_USER" -
 
-echo "Tareas de backup y monitoreo MariaDB configuradas en el crontab de '$BACKUP_USER'."
+echo "Tareas de backup y monitoreo Apache/MariaDB configuradas en el crontab de '$BACKUP_USER'."

@@ -4,14 +4,14 @@ set -u
 
 source "$(dirname "$0")/../colors.sh"
 
-MYSQL="${MYSQL:-/opt/lampp/bin/mysql}"
+MYSQL="${MYSQL:-$(command -v mariadb || command -v mysql || true)}"
 MYSQL_HOST="${MYSQL_HOST:-127.0.0.1}"
 MYSQL_PORT="${MYSQL_PORT:-3306}"
 MYSQL_USER="${MYSQL_USER:-root}"
 DB_PASS="${DB_PASS:-}"
 DB_NAME="${DB_NAME:-NuvaBD}"
 
-if [ ! -x "$MYSQL" ]; then
+if [ -z "$MYSQL" ] || [ ! -x "$MYSQL" ]; then
     print_error "No se encuentra el cliente mysql ejecutable: $MYSQL"
     exit 1
 fi

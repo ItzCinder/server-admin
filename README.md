@@ -297,7 +297,7 @@ El script `scripts/provisioning/setup_backups_cron.sh` instala las tareas progra
 | Configuraciones full | Domingos a las 03:00 |
 | Logs y evidencias diferencial | Todos los días a las 23:30 |
 | Logs y evidencias full | Día 1 de cada mes a las 04:00 |
-| Disponibilidad de MariaDB | Cada 5 minutos |
+| Disponibilidad de Apache y MariaDB | Cada 5 minutos |
 
 Ejecutar como administrador:
 
@@ -307,7 +307,9 @@ sudo bash scripts/provisioning/setup_backups_cron.sh
 
 El bloque administrado se reemplaza de forma idempotente y las entradas de cron ajenas al proyecto se conservan. Para instalar los jobs en otro usuario, usar `BACKUP_USER=usuario`; para una ruta desplegada diferente, usar `PROJECT_DIR=/ruta/server-admin`.
 
-El monitoreo verifica la disponibilidad de MariaDB mediante `mysqladmin ping`, ejecuta una consulta sobre `information_schema` en `NuvaBD` y registra los resultados en `/var/log/backups/mariadb_monitor.log`. Los clientes se esperan en `/opt/lampp/bin/mysqladmin` y `/opt/lampp/bin/mysql`; pueden cambiarse mediante `MYSQLADMIN`, `MYSQL`, `MYSQL_HOST`, `MYSQL_PORT`, `MYSQL_USER`, `DB_PASS`, `DB_NAME` y `MARIADB_MONITOR_LOG`.
+El monitoreo verifica que el servicio Apache (`apache2` o `httpd`) esté activo, comprueba la disponibilidad de MariaDB mediante `mariadb-admin ping` (o `mysqladmin ping`), ejecuta una consulta sobre `information_schema` en `NuvaBD` y registra los resultados en `/var/log/backups/server_monitor.log`. Los clientes se detectan desde el `PATH` y pueden cambiarse mediante `MYSQLADMIN`, `MYSQL`, `APACHE_SERVICE`, `MYSQL_HOST`, `MYSQL_PORT`, `MYSQL_USER`, `DB_PASS`, `DB_NAME` y `SERVER_MONITOR_LOG`.
+
+Los respaldos usan las ubicaciones habituales de una instalación Apache + MariaDB: `/var/www/html`, `/etc/apache2` o `/etc/httpd`, `/etc/mysql`, `/var/log/apache2` o `/var/log/httpd`, y `/var/log/mysql` o `/var/log/mariadb`. Cada ruta puede personalizarse con `SOURCE_DIR`, `APACHE_CONFIG_DIR`, `MARIADB_CONFIG_DIR`, `SOURCE_LOGS_APACHE` y `SOURCE_LOGS_MARIADB`.
 
 ### 9.6 Política y ubicación de los respaldos
 

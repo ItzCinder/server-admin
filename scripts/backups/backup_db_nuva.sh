@@ -4,17 +4,22 @@ DATE=$(date +"%Y%m%d_%H%M%S")
 DEST_DIR="/mnt/backups/db_nuva"
 LOG_FILE="/var/log/backups/db_audit.log"
 
-MYSQLDUMP="/opt/lampp/bin/mysqldump"
+MYSQLDUMP="${MYSQLDUMP:-$(command -v mariadb-dump || command -v mysqldump || true)}"
 DB_USER="root" # Usuario de la BD
 DB_PASS="" # Contraseña del usuario de la BD
 DB_NAME="${DB_NAME:-NuvaBD}" # Nombre de la base de datos
 
+if [ -z "$MYSQLDUMP" ] || [ ! -x "$MYSQLDUMP" ]; then
+    echo "No se encuentra el cliente de respaldo de MariaDB (mariadb-dump/mysqldump)." >&2
+    exit 1
+fi
+
 mkdir -p "$DEST_DIR/daily" "$DEST_DIR/weekly"
-mkdir -p $(dirname "$LOG_FILE")
+mkdir -p "$(dirname "$LOG_FILE")"
 
 if [ "$TYPE" == "daily" ]; then
     # Exportación lógica diaria (Estructura y datos)
-    $MYSQLDUMP -u $DB_USER -p$DB_PASS $DB_NAME | gzip > "$DEST_DIR/daily/nuva_daily_$DATE.sql.gz"
+    "$MYSQLDUMP" -u "$DB_USER" -p"$DB_PASS" "$DB_NAME" | gzip > "$DEST_DIR/daily/nuva_daily_$DATE.sql.gz"
     
     # Retención de 30 días
     count=$(find "$DEST_DIR/daily" -type f -name "*.gz" -mtime +30 | wc -l)
@@ -26,7 +31,7 @@ if [ "$TYPE" == "daily" ]; then
 
 elif [ "$TYPE" == "weekly" ]; then
     # Completo (Full) que incluye rutinas, triggers y eventos
-    $MYSQLDUMP -u $DB_USER -p$DB_PASS --routines --triggers --events $DB_NAME | gzip > "$DEST_DIR/weekly/nuva_full_$DATE.sql.gz"
+    "$MYSQLDUMP" -u "$DB_USER" -p"$DB_PASS" --routines --triggers --events "$DB_NAME" | gzip > "$DEST_DIR/weekly/nuva_full_$DATE.sql.gz"
     
     # Retención de 12 meses
     count=$(find "$DEST_DIR/weekly" -type f -name "*.gz" -mtime +365 | wc -l)

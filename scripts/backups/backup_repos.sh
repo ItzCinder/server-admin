@@ -2,12 +2,17 @@
 TYPE=$1
 DATE=$(date +"%Y%m%d_%H%M%S")
 DEST_DIR="/mnt/backups/repos"
-SOURCE_DIR="/opt/lampp/htdocs" # Ruta de tu código web
+SOURCE_DIR="${SOURCE_DIR:-/var/www/html}"
 LOG_FILE="/var/log/backups/repos.log"
 SNAPSHOT_FILE="$DEST_DIR/repos_snapshot.snar"
 
 mkdir -p "$DEST_DIR/differential" "$DEST_DIR/full"
-mkdir -p $(dirname "$LOG_FILE")
+mkdir -p "$(dirname "$LOG_FILE")"
+
+if [ ! -d "$SOURCE_DIR" ]; then
+    echo "No existe el directorio del sitio Apache: $SOURCE_DIR" >&2
+    exit 1
+fi
 
 if [ "$TYPE" == "full" ]; then
     # Eliminar el snapshot anterior para forzar un backup completo nuevo
